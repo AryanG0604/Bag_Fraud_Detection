@@ -1,7 +1,6 @@
 import streamlit as st
 import os
 import time
-import cv2
 import numpy as np
 import pandas as pd
 import joblib
@@ -9,6 +8,14 @@ import imagehash
 from PIL import Image
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+# Handle OpenCV import with fallback
+try:
+    import cv2
+except ImportError as e:
+    st.error(f"OpenCV import error: {e}")
+    st.error("Please check the requirements.txt and packages.txt files")
+    st.stop()
 
 # === Streamlit Configuration ===
 st.set_page_config(
