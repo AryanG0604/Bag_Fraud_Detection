@@ -1,4 +1,3 @@
-streamlit_app_code = '''
 import streamlit as st
 import os
 import time
@@ -363,8 +362,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-'''
-
-# Write the Streamlit app to a file
-with open('fraud_detection_app.py', 'w') as f:
-    f.write(streamlit_app_code)
