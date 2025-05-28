@@ -416,7 +416,7 @@ def main():
         # Load and preprocess image
         image = cv2.imread(temp_path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image = cv2.resize(image, (IMG_SIZE, IMG_SIZE))
+        image = cv2.resize(image, IMG_SIZE)
 
         prediction = predict(image)
 
