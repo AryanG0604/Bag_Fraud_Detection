@@ -373,7 +373,6 @@
 import streamlit as st
 import numpy as np
 import cv2
-from PIL import Image
 import tempfile
 import os
 import joblib
@@ -398,10 +397,15 @@ def predict(image_np):
     features = np.array(features).reshape(1, -1)
     features_scaled = scaler.transform(features)
     features_selected = selector.transform(features_scaled)
-    pred1 = xgb_model.predict(features_selected)[0]
-    pred2 = lgbm_model.predict(features_selected)[0]
-    final_pred = int(pred1 or pred2)
-    return final_pred
+    
+    # Predict probabilities for the positive class (fraudulent)
+    prob1 = xgb_model.predict_proba(features_selected)[0][1]
+    prob2 = lgbm_model.predict_proba(features_selected)[0][1]
+    
+    avg_prob = (prob1 + prob2) / 2  # Average confidence
+    final_pred = int(avg_prob >= 0.5)  # Threshold at 0.5
+    
+    return final_pred, avg_prob
 
 def main():
     if uploaded_file is not None:
@@ -418,7 +422,7 @@ def main():
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = cv2.resize(image, IMG_SIZE)
 
-        prediction = predict(image)
+        prediction, confidence = predict(image)
 
         st.markdown("---")
         if prediction == 1:
@@ -426,7 +430,11 @@ def main():
         else:
             st.success("🟢 **This is an Original Image.**")
 
+        st.markdown(f"**🔍 Confidence:** `{confidence:.2%}`")
+
+        # Clean up temp file
         os.remove(temp_path)
 
 if __name__ == "__main__":
     main()
+
