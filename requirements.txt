@@ -10,3 +10,4 @@ matplotlib
 seaborn
 xgboost
 lightgbm
+scikit-image>=0.19.3
