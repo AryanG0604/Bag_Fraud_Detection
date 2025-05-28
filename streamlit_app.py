@@ -404,7 +404,7 @@ def predict(image_np):
     
     avg_prob = (prob1 + prob2) / 2  # Average confidence
     final_pred = int(avg_prob >= 0.5)  # Threshold at 0.5
-    if final_pred = 0:
+    if final_pred == 0:
             avg+prob=1-avg_prob
     
     return final_pred, avg_prob
